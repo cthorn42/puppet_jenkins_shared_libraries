@@ -1,5 +1,12 @@
 #!/bin/bash
-#USAGE: ./promote_puppet_agent.sh <version>
+#USAGE: ./promote_puppet_agent.sh <version> <codename>
+
+version=$1
+codename=$2 
+
+if [[ $codename != "main" ]]; then
+  exit 0
+fi
 
 source /usr/local/rvm/scripts/rvm
 rvm use "2.5.1"
@@ -68,12 +75,12 @@ set -e
 
 cd $package-$version
 
-major_agent_reported_version=$(cat version | cut -d '.' -f 1)
+major_agent_reported_version=$(echo $version | cut -d '.' -f 1)
 git_describe=$(git describe)
 major_suite_version=$(echo $git_describe | cut -d '.' -f 1)
 
 if [[ $major_agent_reported_version != $major_suite_version ]]; then
-  agent_reported_version=$(cat version)
+  agent_reported_version=$(echo $version)
   commit_number=$(echo $git_describe | cut -d '-' -f 2)
   package_reported_version="$agent_reported_version-$commit_number"
   bundle update

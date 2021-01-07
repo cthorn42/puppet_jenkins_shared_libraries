@@ -35,7 +35,7 @@ if [[ ! -z $next_pe_version ]] ; then
   tagging_task=new_release:create_and_push_new_pe_tag
   export PE_BRANCH_NAME=$branch_from
   export NEXT_PE_VERSION=$next_pe_version
-elif [[ $branch_from == master ]] ; then
+elif [[ $branch_from == main ]] ; then
   : === Next PE version not specified, incrementing Y value and pushing new tag
   tagging_task=new_release:create_and_push_new_y_tag
   export PE_BRANCH_NAME=$branch_from
