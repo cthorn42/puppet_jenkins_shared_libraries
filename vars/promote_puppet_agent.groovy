@@ -1,6 +1,6 @@
 import com.puppet.jenkinsSharedLibraries.BundleInstall
 
-def call(String version) {
+def call(String version, String branch_from, String next_pe_version) {
 
   rubyVersion = "2.5.1"
   def setup_gems = new BundleInstall(rubyVersion)
@@ -16,6 +16,6 @@ def call(String version) {
   //Execute bash script, catch and print output and errors
   node('worker') {
     sh "curl -O https://raw.githubusercontent.com/puppetlabs/puppet_jenkins_shared_libraries/main/vars/bash/promote_puppet_agent.sh"
-    sh "bash promote_puppet_agent.sh $version"
+    sh "bash promote_puppet_agent.sh $version $branch_from $next_pe_version"
   }
 }

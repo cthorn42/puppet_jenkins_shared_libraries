@@ -1,5 +1,13 @@
 #!/bin/bash
-#USAGE: ./promote_puppet_agent.sh <version>
+#USAGE: ./promote_puppet_agent.sh <version> <branch_from>
+
+version=$1
+branch_from=$2 
+next_pe_version=${3:-}
+
+if [[ $branch_from != "main" ]]; then
+  exit 0
+fi
 
 source /usr/local/rvm/scripts/rvm
 rvm use "2.5.1"
@@ -16,12 +24,18 @@ export IPS_SIGNING_SSH_KEY=/home/jenkins/.ssh/id_signing
 export MSI_SIGNING_SSH_KEY=/home/jenkins/.ssh/id_signing
 export MSI_SIGNING_SERVER=windowssigning-aio1-prod.delivery.puppetlabs.net
 
-git checkout $version-release
-# set PE_version_XY from enterprise-dist git describe
-# This is getting the X.Y version from the tag
-export PE_version_XY=$(git describe | cut -d'.' -f 1-2)
+rm -rf ./${GITHUB_PROJECT}
+git clone git@github.com:puppetlabs/${GITHUB_PROJECT} ./${GITHUB_PROJECT}
+cd ${GITHUB_PROJECT}
 
 git checkout main
+
+PE_version_XY=$next_pe_version
+if [[ -z $PE_version_XY ]] ; then 
+  # Set PE_version_XY from enterprise-dist git describe
+  # Get the X.Y version from the tag
+  PE_version_XY=$(git describe | cut -d'.' -f 1-2)
+fi 
 
 filename_string=$(grep --max-count=1 '"filename": "puppet-agent-' packages.json)
 suite_commit=$(echo $filename_string | cut -d'-' -f 3-3 )
@@ -46,9 +60,9 @@ fi
 
 
 # Now we use the yaml file to find the signing bundle, which we will use to run the rake tasks
-version=$(ruby -ryaml -e "puts YAML.load_file('pkg/$suite_commit.yaml')[:version]")
+pa_version=$(ruby -ryaml -e "puts YAML.load_file('pkg/$suite_commit.yaml')[:version]")
 package=$(ruby -ryaml -e "puts YAML.load_file('pkg/$suite_commit.yaml')[:project]")
-signing_bundle=$package-$version-signing_bundle.tar.gz
+signing_bundle=$package-$pa_version-signing_bundle.tar.gz
 /usr/bin/wget -r -np -nH --cut-dirs 3 -P pkg --reject 'index*' http://builds.puppetlabs.lan/$vanagon_project_name/$suite_commit/artifacts/$signing_bundle
 if [[ ! -f pkg/$signing_bundle ]] ; then
   : === "The signing bundle is required to ship this build to the nightly repos. Please ensure that $suite_commit of $vanagon_project_name has finished building before this job is executed."
@@ -60,20 +74,20 @@ tar xf "pkg/$signing_bundle"
 
 : === Cloning signing bundle
 # Clone the bundle so we have somewhere to invoke rake tasks
-git clone ${signing_bundle%%.tar.gz} $package-$version
+git clone ${signing_bundle%%.tar.gz} $package-$pa_version
 
 set -e
 
 : === Executing internal agent ship
 
-cd $package-$version
+cd $package-$pa_version
 
-major_agent_reported_version=$(cat version | cut -d '.' -f 1)
+major_agent_reported_version=$(echo $pa_version | cut -d '.' -f 1)
 git_describe=$(git describe)
 major_suite_version=$(echo $git_describe | cut -d '.' -f 1)
 
 if [[ $major_agent_reported_version != $major_suite_version ]]; then
-  agent_reported_version=$(cat version)
+  agent_reported_version=$(echo $pa_version)
   commit_number=$(echo $git_describe | cut -d '-' -f 2)
   package_reported_version="$agent_reported_version-$commit_number"
   bundle update
@@ -81,9 +95,4 @@ if [[ $major_agent_reported_version != $major_suite_version ]]; then
 fi
 
 bundle install --path $BUNDLE_PATH --retry 3
-bundle exec rake pl:jenkins:retrieve['repos','pkg/repos'] --trace
-bundle exec rake pl:jenkins:generate_signed_repos[signed] --trace
-bundle exec rake pl:jenkins:prepare_signed_repos[agent-downloads.delivery.puppetlabs.net,signed,version] --trace
-bundle exec rake pl:jenkins:pack_all_signed_repos_individually[$package,version] --trace
-bundle exec rake pl:jenkins:deploy_signed_repos[agent-downloads.delivery.puppetlabs.net,/opt/puppet-agent] --trace
 bundle exec rake pl:jenkins:link_signed_repos[agent-downloads.delivery.puppetlabs.net,/opt/puppet-agent,version,$PE_version_XY] --trace

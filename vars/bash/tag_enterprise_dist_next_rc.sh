@@ -12,7 +12,7 @@ set -x
 
 version=${1:-invalid}
 branch_from=${2:-invalid}
-next_pe_version=${3:-not_specified}
+next_pe_version=${3:-}
 
 # make sure our params are set to something reasonable
 if [[ $version == invalid ]]; then
@@ -25,7 +25,7 @@ if [[ $branch_from == invalid ]]; then
   exit 1
 fi
 
-if [[ $next_pe_version == not_specified ]]; then
+if [[ -z $next_pe_version ]]; then
   : === Info: No value set for NEXT_PE_VERSION... calculating based on x.y value
 fi
 
@@ -35,7 +35,7 @@ if [[ ! -z $next_pe_version ]] ; then
   tagging_task=new_release:create_and_push_new_pe_tag
   export PE_BRANCH_NAME=$branch_from
   export NEXT_PE_VERSION=$next_pe_version
-elif [[ $branch_from == master ]] ; then
+elif [[ $branch_from == main ]] ; then
   : === Next PE version not specified, incrementing Y value and pushing new tag
   tagging_task=new_release:create_and_push_new_y_tag
   export PE_BRANCH_NAME=$branch_from

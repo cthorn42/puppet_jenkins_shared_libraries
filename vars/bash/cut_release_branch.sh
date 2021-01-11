@@ -1,7 +1,7 @@
-#USAGE: ./cut_release_branch.sh <version> <codename>
+#USAGE: ./cut_release_branch.sh <version> <branch_from>
 
 version=$1
-codename=$2
+branch_from=$2
 
 rm -rf ./${GITHUB_PROJECT}
 git clone git@github.com:puppetlabs/${GITHUB_PROJECT} ./${GITHUB_PROJECT}
@@ -15,7 +15,7 @@ then
   exit 1
 fi
 
-git checkout ${codename}
+git checkout ${branch_from}
 if [[ ("$?" == 0) ]]
 then
   git checkout -b ${version}-release
