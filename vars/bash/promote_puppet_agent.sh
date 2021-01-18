@@ -52,7 +52,7 @@ fi
 # Retrieve the artifacts to get at the params file ($suite_commit.yaml)
 # suite_commit is the sha of the version of puppet_agent on enterprise/dist/main that is currently promoted in the main branch
 vanagon_project_name=puppet-agent
-/usr/bin/wget -r -np -nH --cut-dirs 3 -P pkg --reject 'index*' http://builds.puppetlabs.lan/$vanagon_project_name/$suite_commit/artifacts/$suite_commit.yaml
+/usr/bin/wget -r -np -nH --cut-dirs 3 -P pkg --reject 'index*' http://builds.delivery.puppetlabs.net/$vanagon_project_name/$suite_commit/artifacts/$suite_commit.yaml
 if [[ ! -f pkg/$suite_commit.yaml ]] ; then
   : === "The params file is required to ship this build to the nightly repos. Please ensure that $suite_commit of $vanagon_project_name has finished building before this job is executed."
   exit 1
@@ -63,7 +63,7 @@ fi
 pa_version=$(ruby -ryaml -e "puts YAML.load_file('pkg/$suite_commit.yaml')[:version]")
 package=$(ruby -ryaml -e "puts YAML.load_file('pkg/$suite_commit.yaml')[:project]")
 signing_bundle=$package-$pa_version-signing_bundle.tar.gz
-/usr/bin/wget -r -np -nH --cut-dirs 3 -P pkg --reject 'index*' http://builds.puppetlabs.lan/$vanagon_project_name/$suite_commit/artifacts/$signing_bundle
+/usr/bin/wget -r -np -nH --cut-dirs 3 -P pkg --reject 'index*' http://builds.delivery.puppetlabs.net/$vanagon_project_name/$suite_commit/artifacts/$signing_bundle
 if [[ ! -f pkg/$signing_bundle ]] ; then
   : === "The signing bundle is required to ship this build to the nightly repos. Please ensure that $suite_commit of $vanagon_project_name has finished building before this job is executed."
   exit 1
