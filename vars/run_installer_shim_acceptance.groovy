@@ -16,7 +16,7 @@ def call(String rubyVersion, String platform, String peFamily) {
     sh "${bundle_exec.bundleExec}"
 
     def acceptance_gems = new BundleInstall(rubyVersion)
-    def generate_beaker_hosts = new BeakerHostgenerator(rubyVersion, "https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/${peFamily}/ci-ready", pe_version, platform, 'vmpooler', 'hosts.cfg')
+    def generate_beaker_hosts = new BeakerHostgenerator(rubyVersion, "https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/${peFamily}/ci-ready", pe_version, platform, 'abs', 'hosts.cfg')
     def run_beaker = new Beaker(rubyVersion, '--xml --debug --root-keys --repo-proxy --hosts hosts.cfg --type pe --keyfile /var/lib/jenkins/.ssh/id_rsa-acceptance --tests tests --preserve-hosts never --pre-suite pre-suite')
 
     sh """#!/bin/bash
