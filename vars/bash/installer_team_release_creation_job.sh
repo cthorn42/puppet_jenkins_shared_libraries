@@ -23,7 +23,7 @@ init_release_job_creation() {
 \            m_name: '{name}'\n\
 \            m_value_stream: '{value_stream}'\n\
 \            m_projects: '{value_stream}_pe-acceptance-tests_packaging_promotion_${PE_VERSION}-release,{value_stream}_{name}_init-cinext_smoke-upgrade_${PE_VERSION}-release,{value_stream}_{name}_init-cinext_split-smoke-upgrade_${PE_VERSION}-release,{value_stream}_jar-jar_component-update_${PE_VERSION}-release'" $yaml_filepath
-  
+
   git add $yaml_filepath
 }
 
@@ -195,23 +195,6 @@ pe_modules_release_job_creation() {
             component_scm_branch: '${PE_VERSION}-release'
             vanagon_scm_branch: '${PE_VERSION}-release'
             promote_branch: '${PE_VERSION}-release'
-            pe_promotion: 'FALSE'" >> $yaml_filepath
-  # These secondary pipelines are just for 2019.8+
-  # I think they're probably only for pe-admin, but not entirely sure,
-  # so we'll keep promoting p-e-m into pe-installer-vanagon anyway.
-  if (($X_FAMILY > 2018)); then
-    echo "
-        - 'puppet-enterprise-modules-secondary-component-pipeline':
-            p_component_branch: '${PE_VERSION}-release'
-            qualifier: '${PE_VERSION}-release_pe-installer'
-            next_branch: ''
-            p_components_to_prep: 'pe-installer-vanagon'
-            p_vanagon_repo: 'pe-installer-vanagon'
-            p_vanagon_project_name: 'pe-installer-vanagon'
-            p_vanagon_repo_branch: '${PE_VERSION}-release'
-            component_scm_branch: '${PE_VERSION}-release'
-            vanagon_scm_branch: '${PE_VERSION}-release'
-            promote_branch: '${PE_VERSION}-release'
             pe_promotion: 'FALSE'
         - 'pe-integration-module-pr':
             cinext_enabled: 'false'
@@ -219,7 +202,6 @@ pe_modules_release_job_creation() {
             pe_family: ${FAMILY}
             p_split_topology: 'pe-postgres'
             upgrade_from: '2019.4.0'" >> $yaml_filepath
-  fi
 
   git add $yaml_filepath
 }
