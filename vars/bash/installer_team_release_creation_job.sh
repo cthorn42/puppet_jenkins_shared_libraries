@@ -174,7 +174,6 @@ pe_installer_shim_job_creation() {
         - 'pe-installer-shim':
             scm_branch: '${PE_VERSION}-release' # pe-installer-shim branch to trigger from
             promote_branch: '${PE_VERSION}-release' # enterprise-dist branch to promote into
-            p_run_pez: False
             qualifier: '${PE_VERSION}-release'" >> $yaml_filepath
 
   git add $yaml_filepath
