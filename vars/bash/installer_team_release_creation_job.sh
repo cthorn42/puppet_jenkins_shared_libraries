@@ -243,7 +243,7 @@ pe_backup_tools_release_job_creation() {
 \            env_command: |\n\
 \              source \/usr\/local\/rvm\/scripts\/rvm\n\
 \              rvm use {rvm_ruby_version}\n\
-\              export pe_ver=\\\"\$(redis-cli -h redis.delivery.puppetlabs.net get ${FAMILY}_release_pe_version)\\\"\n\
+\              export pe_ver=\\\\\"\\\\\$(redis-cli -h redis.delivery.puppetlabs.net get ${FAMILY}_release_pe_version)\\\\\"\n\
 \              export PE_FAMILY=${FAMILY}\n\
 \              export BUNDLE_PATH=.bundle\/gems BUNDLE_BIN=.bundle\/bin SHA=\$SUITE_COMMIT CONFIG=config\/nodes\/\$TEST_TARGET.yaml\n\
 \              eval \"\$(ssh-agent -t 24h -s)\"\n\
@@ -256,7 +256,7 @@ pe_backup_tools_release_job_creation() {
 \            env_command: |\n\
 \              source \/usr\/local\/rvm\/scripts\/rvm\n\
 \              rvm use {rvm_ruby_version}\n\
-\              export pe_ver=\"\$(redis-cli -h redis.delivery.puppetlabs.net get ${FAMILY}_release_pe_version)\"\n\
+\              export pe_ver=\\\\\"\\\\\$(redis-cli -h redis.delivery.puppetlabs.net get ${FAMILY}_release_pe_version)\\\\\"\n\
 \              export PE_FAMILY=${FAMILY}\n\
 \              export BUNDLE_PATH=.bundle\/gems BUNDLE_BIN=.bundle\/bin SHA=\$SUITE_COMMIT CONFIG=config\/nodes\/\$TEST_TARGET.yaml\n\
 \              eval \"\$(ssh-agent -t 24h -s)\"\n\
