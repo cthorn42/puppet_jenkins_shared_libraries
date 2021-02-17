@@ -30,7 +30,7 @@ cd ${GITHUB_PROJECT}
 
 git checkout main
 
-PE_version_XY=$next_pe_version
+PE_version_XY=$(echo $next_pe_version | cut -d'.' -f 1-2)
 if [[ -z $PE_version_XY ]] ; then 
   # Set PE_version_XY from enterprise-dist git describe
   # Get the X.Y version from the tag
