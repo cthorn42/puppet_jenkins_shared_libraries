@@ -105,6 +105,9 @@ integration_release_job_creation() {
 \            p_scm_alt_code_name: '${p_scm_alt_code_name}'\n\
 \            <<: *p_${family_setting}_settings\n\
 \            <<: *p_upgrade_axes_${family_setting}\n\
+\            p_dogfooding_upgrade_job_disabled: True\n\
+\            p_dogfooding_lei_upgrade_job_disabled: True\n\
+\            p_z_to_z_disabled: True\n\
 \            p_proxy_genconfig_extra: '--pe_dir=https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/${FAMILY}/release/ci-ready/'" $yaml_filepath
 
   # We probably won't want to disable the 'main' CI pipeline since people will still be landing changes there,
