@@ -277,6 +277,7 @@ pe_backup_tools_release_job_creation() {
             p_pkg-int-sys-testing_env-command: |
               export pe_dist_dir=https://artifactory.delivery.puppetlabs.net/artifactory/generic_enterprise__local/${FAMILY}/release/ci-ready
               export PE_FAMILY=${FAMILY}
+              export \"\$(redis-cli -h redis.delivery.puppetlabs.net get ${FAMILY}_release_pe_version)\"
               eval \"\$(ssh-agent -t 24h -s)\"
               ssh-add \$HOME/.ssh/id_rsa
               ssh-add \$HOME/.ssh/id_rsa-acceptance
