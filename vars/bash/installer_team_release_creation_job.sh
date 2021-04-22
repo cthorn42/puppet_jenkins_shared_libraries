@@ -214,7 +214,6 @@ pe_installer_promote_release_job_creation() {
   echo "
         # ---- ${PE_VERSION}-release ----
         - 'ruby-vanagon-component-pipeline':
-            p_rvm_ruby_version: 'ruby-2.5.1'
             p_component_branch: '${PE_VERSION}-release'
             component_scm_branch: '${PE_VERSION}-release'
             qualifier: '${PE_VERSION}-release'
