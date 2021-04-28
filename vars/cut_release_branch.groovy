@@ -8,7 +8,7 @@ def call(String version, String branch_from) {
   }
   //Execute bash script, catch and print output and errors
   node('worker') {
-    sh "curl -O https://raw.githubusercontent.com/puppetlabs/puppet_jenkins_shared_libraries/main/vars/bash/cut_release_branch.sh"
+    writeFile file:'cut_release_branch.sh', text:libraryResource('cut_release_branch.sh')
     sh "chmod +x cut_release_branch.sh"
     sh "bash cut_release_branch.sh $version $branch_from"
   }

@@ -9,7 +9,7 @@ def call(String version) {
   //Execute bash script, catch and print output and errors
   node('worker') {
     withCredentials([string(credentialsId: 'githubtoken', variable: 'GITHUB_TOKEN')]) {
-      sh "curl -O https://raw.githubusercontent.com/puppetlabs/puppet_jenkins_shared_libraries/main/vars/bash/release_view_creation.sh"
+      writeFile file:'release_view_creation.sh', text:libraryResource('release_view_creation.sh')
       sh "chmod +x release_view_creation.sh"
       sh "bash release_view_creation.sh $version"
     }
