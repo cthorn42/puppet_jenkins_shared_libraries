@@ -8,7 +8,7 @@ def call(String version) {
   }
 
   //Execute bash script, catch and print output and errors
-  node('worker') {
+  node('k8s-worker') {
     writeFile file:'tag_for_release.sh', text:libraryResource('tag_for_release.sh')
     sh "chmod +x tag_for_release.sh"
     sh "bash tag_for_release.sh $version"

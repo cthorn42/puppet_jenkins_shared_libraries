@@ -7,7 +7,7 @@ def call(String version, String branch_from) {
     throw new Exception("Invalid version")
   }
   //Execute bash script, catch and print output and errors
-  node('worker') {
+  node('k8s-worker') {
     writeFile file:'cut_release_branch.sh', text:libraryResource('cut_release_branch.sh')
     sh "chmod +x cut_release_branch.sh"
     sh "bash cut_release_branch.sh $version $branch_from"
