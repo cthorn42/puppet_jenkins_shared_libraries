@@ -48,7 +48,7 @@ fi
 rm -rf ./$GITHUB_PROJECT
 git clone git@github.com:puppetlabs/$GITHUB_PROJECT ./$GITHUB_PROJECT
 
-cd $GITHUB_PROJECT
+builtin cd $GITHUB_PROJECT
 
 bundle install --path $BUNDLE_PATH --retry 3
 
