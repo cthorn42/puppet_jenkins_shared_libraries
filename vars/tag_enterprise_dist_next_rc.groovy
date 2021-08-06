@@ -14,7 +14,7 @@ def call(String version, String branch_from, String next_pe_version) {
     throw new Exception("Invalid version")
   }
   //Execute bash script, catch and print output and errors
-  node('worker') {
+  node('k8s-worker') {
     writeFile file:'tag_enterprise_dist_next_rc.sh', text:libraryResource('tag_enterprise_dist_next_rc.sh')
     sh "bash tag_enterprise_dist_next_rc.sh $version $branch_from $next_pe_version"
   }

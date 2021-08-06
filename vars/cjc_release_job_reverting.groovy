@@ -7,7 +7,7 @@ def call(String version) {
     throw new Exception("Invalid version")
   }
   //Execute bash script, catch and print output and errors
-  node('worker') {
+  node('k8s-worker') {
     withCredentials([string(credentialsId: 'githubtoken', variable: 'GITHUB_TOKEN')]) {
       writeFile file:'release_job_reverts.sh', text:libraryResource('release_job_reverts.sh')
       sh "chmod +x release_job_reverts.sh"

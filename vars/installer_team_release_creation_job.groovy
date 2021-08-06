@@ -13,7 +13,7 @@ def call(String version, String codename, String hour) {
     throw new Exception("Invalid hour")
   }
   //Execute bash script, catch and print output and errors
-  node('worker') {
+  node('k8s-worker') {
     withCredentials([string(credentialsId: 'githubtoken', variable: 'GITHUB_TOKEN')]) {
       writeFile file:'installer_team_release_creation_job.sh', text:libraryResource('installer_team_release_creation_job.sh')
       sh "chmod +x installer_team_release_creation_job.sh"
