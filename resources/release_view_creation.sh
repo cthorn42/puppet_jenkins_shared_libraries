@@ -15,12 +15,12 @@ git pull
 git checkout -b $TEMP_BRANCH
 
 # supported_upgrade_defaults logic
-# incase we are basing the release branch off of master
+# incase we are basing the release branch off of main
 upgrade_default_name="p_${X_FAMILY}_${Y_FAMILY}_supported_upgrade_defaults"
 grep_output=`grep ${upgrade_default_name} $YAML_FILEPATH`
 FAMILY_SETTING="${X_FAMILY}_${Y_FAMILY}"
 if [ -z "$grep_output" ]; then
-    FAMILY_SETTING="master"
+    FAMILY_SETTING="main"
 fi
 
 echo "
@@ -50,5 +50,5 @@ echo "
 git add $YAML_FILEPATH
 git commit -m "${JOB_NAME} for ${PE_VERSION}-release"
 git push origin $TEMP_BRANCH
-PULL_REQUEST="$(git show -s --pretty='format:%s%n%n%b' | hub pull-request -b master -F -)"
+PULL_REQUEST="$(git show -s --pretty='format:%s%n%n%b' | hub pull-request -b main -F -)"
 echo "Opened PR for $(pwd): ${PULL_REQUEST}"

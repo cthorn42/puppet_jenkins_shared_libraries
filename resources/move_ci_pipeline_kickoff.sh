@@ -3,7 +3,7 @@
 # Moves PE integration pipeline kickoff time. If HOUR == -1, disables the pipeline instead.
 readonly BRANCH=$1
 readonly HOUR=$2
-readonly CJC_BRANCH="master"
+readonly CJC_BRANCH="main"
 readonly TEMP_BRANCH="auto/${CJC_BRANCH}/change_PE_CI_time_${BRANCH}"
 
 # Find CI status of the merge PR

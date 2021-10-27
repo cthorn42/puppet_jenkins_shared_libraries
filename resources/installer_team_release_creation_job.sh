@@ -312,7 +312,7 @@ main() {
   echo 'Pushing changes to upstream...'
   git push origin $TEMP_BRANCH
   echo 'Creating PR...'
-  PULL_REQUEST="$(git show -s --pretty='format:%s%n%n%b' | hub pull-request -b master -F -)"
+  PULL_REQUEST="$(git show -s --pretty='format:%s%n%n%b' | hub pull-request -b main -F -)"
 }
 main || error_exit 'Release job creation failed'
 echo "Successfully Opened PR for $(pwd): ${PULL_REQUEST}"
